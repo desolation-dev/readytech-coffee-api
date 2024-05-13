@@ -9,6 +9,7 @@ public class Program
     /// </summary>
     static int brewCoffeeCalls = 0;
 
+
     // MAIN //
     private static void Main(string[] args)
     {
@@ -28,7 +29,9 @@ public class Program
     /// with a BrewCoffeeResponse in the respose body serialized as a JSON object. On 
     /// every fifth call, should return a status code 503 empty response instead.
     /// </summary>
-    public static Results<JsonHttpResult<BrewCoffeeResponse>, StatusCodeHttpResult> BrewCoffee(ref int endpointCalls) {
+    public static Results<JsonHttpResult<BrewCoffeeResponse>, StatusCodeHttpResult> BrewCoffee(ref int endpointCalls, bool aprilFirstTest=false) {
+        // Check if April 1st. If so return joke status code 418
+        if (IsAprilFirst(DateTime.Today) || aprilFirstTest) return TypedResults.StatusCode(418);
         // Update the amount of times this endpoint has been called
         endpointCalls++;
         // Return status code 503 if out of coffee (every fifth response)
@@ -59,4 +62,13 @@ public class Program
         public required string Prepared { get; set; }
     }
 
+    /// <summary>
+    /// Returns true if the passed DateTime object is April the 1st
+    /// </summary>
+    /// <param name="dateTime">The DateTime object to check</param>
+    /// <returns>True if is April the 1st, False otherwise</returns>
+    public static bool IsAprilFirst(DateTime dateTime)
+    {
+        return dateTime.Month == 4 && dateTime.Day == 1;
+    }
 }
